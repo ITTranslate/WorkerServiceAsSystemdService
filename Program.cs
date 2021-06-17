@@ -63,7 +63,7 @@ namespace MyService
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseWindowsService() // Sets the host lifetime to WindowsServiceLifetime...
+                // .UseWindowsService() // Sets the host lifetime to WindowsServiceLifetime...
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
