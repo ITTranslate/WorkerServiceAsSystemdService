@@ -26,5 +26,8 @@ User=yourusername
 # To figure out this value, run 'env | grep DOTNET_ROOT' when dotnet has been loaded into your shell.
 Environment=DOTNET_ROOT=/usr/share/dotnet/dotnet
 
+# This gives time to MyService to shutdown gracefully.
+TimeoutStopSec=300
+
 [Install]
 WantedBy=multi-user.target
