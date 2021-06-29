@@ -100,3 +100,33 @@ systemctl is-enabled MyService
 # 查看日志
 journalctl -u MyService -f
 ```
+
+## 要兼容两种系统？
+
+修改一下 *Program.cs* 中的 `CreateHostBuilder` 方法：
+
+```csharp
+public static IHostBuilder CreateHostBuilder(string[] args)
+{
+    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    {
+        return Host.CreateDefaultBuilder(args)
+            .UseWindowsService() // Sets the host lifetime to WindowsServiceLifetime...
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddHostedService<Worker>();
+            })
+            .UseSerilog(); //将 Serilog 设置为日志提供程序
+    }
+    else // if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+    {
+        return Host.CreateDefaultBuilder(args)
+            .UseSystemd() // Sets the host lifetime to Microsoft.Extensions.Hosting.Systemd.SystemdLifetime...
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddHostedService<Worker>();
+            })
+            .UseSerilog(); //将 Serilog 设置为日志提供程序
+    }
+}
+```
