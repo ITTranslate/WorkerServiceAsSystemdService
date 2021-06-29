@@ -24,6 +24,18 @@ dotnet add package Microsoft.Extensions.Hosting.Systemd
 
 修改的文件包含： *appsettings.json*, *Program.cs*
 
+## 构建
+
+```bash
+dotnet build
+```
+
+## 发布
+
+```bash
+dotnet publish -c Release -r linux-x64 -o c:\test\workerpub\linux
+```
+
 ## 服务单元配置文件
 
 MyService.service
@@ -62,18 +74,6 @@ TimeoutStopSec=300
 
 [Install]
 WantedBy=multi-user.target
-```
-
-## 构建
-
-```bash
-dotnet build
-```
-
-## 发布
-
-```bash
-dotnet publish -c Release -r linux-x64 -o c:\test\workerpub\linux
 ```
 
 ## 管理服务
