@@ -24,6 +24,46 @@ dotnet add package Microsoft.Extensions.Hosting.Systemd
 
 修改的文件包含： *appsettings.json*, *Program.cs*
 
+## 服务单元配置文件
+
+MyService.service
+
+```ini
+[Unit]
+Description=Long running service/daemon created from .NET worker template
+
+[Service]
+# The systemd service file must be configured with Type=notify to enable notifications.
+Type=notify
+# will set the Current Working Directory (CWD). Worker service will have issues without this setting
+WorkingDirectory=/srv/Worker
+# systemd will run this executable to start the service
+ExecStart=/srv/Worker/MyService
+# to query logs using journalctl, set a logical name here  
+SyslogIdentifier=MyService
+
+# Use your username to keep things simple.
+# If you pick a different user, make sure dotnet and all permissions are set correctly to run the app
+# To update permissions, use 'chown yourusername -R /srv/Worker' to take ownership of the folder and files,
+#       Use 'chmod +x /srv/Worker/Worker' to allow execution of the executable file
+User=yourusername
+
+# ensure the service restarts after crashing
+# Restart=always
+# amount of time to wait before restarting the service
+# RestartSec=5
+
+# This environment variable is necessary when dotnet isn't loaded for the specified user.
+# To figure out this value, run 'env | grep DOTNET_ROOT' when dotnet has been loaded into your shell.
+Environment=DOTNET_ROOT=/usr/share/dotnet/dotnet
+
+# This gives time to MyService to shutdown gracefully.
+TimeoutStopSec=300
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ## 构建
 
 ```bash
